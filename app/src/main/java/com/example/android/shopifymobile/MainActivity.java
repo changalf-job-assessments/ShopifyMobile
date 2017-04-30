@@ -10,7 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +46,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void fetchData() {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+        String url = "https://shopicruit.myshopify.com/admin/orders.json?" +
+                "page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        mTotalRevenue.setText(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        mTotalRevenue.setText("Something went wrong...");
+                    }
+                });
+        requestQueue.add(stringRequest);
     }
 
     @Override
