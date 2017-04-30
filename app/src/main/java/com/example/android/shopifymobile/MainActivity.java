@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTotalRevenue;
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         mTotalRevenue = (TextView) findViewById(R.id.total_revenue);
         mKeyboardsSold = (TextView) findViewById(R.id.total_keyboards_sold);
 
-
+        fetchData();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -35,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    public void fetchData() {
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
     }
 
     @Override
