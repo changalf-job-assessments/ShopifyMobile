@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         double totalRevenue = 0.0;
                         int numberOfKeysboardsSold = 0;
-                        int quantityOfItem = 0;
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray orders = jsonObject.getJSONArray("orders");
