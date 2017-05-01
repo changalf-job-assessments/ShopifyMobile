@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
 
-                            mTotalRevenue.setText("$" + String.valueOf(totalRevenue));
+                            mTotalRevenue.setText("$" + String.valueOf(Math.round(totalRevenue * 100.0) / 100.0));
                             mKeyboardsSold.setText(String.valueOf(numberOfKeysboardsSold));
                         } catch (Exception e) {
                             Log.e(LOG_TAG, e.toString());
