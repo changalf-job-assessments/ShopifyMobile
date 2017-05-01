@@ -70,21 +70,9 @@ public class MainActivity extends AppCompatActivity {
                                 double totalPrice = overallOrderInfo.getDouble("total_price");
                                 totalRevenue += totalPrice;
 
-//                                JSONArray individualOrderInfo = overallOrderInfo.getJSONArray("line_items");
-//                                for (int j = 0; j < individualOrderInfo.length(); i++) {
-//                                    JSONObject individualItemInfo = individualOrderInfo.getJSONObject(j);
-//                                    String nameOfItem = individualItemInfo.getString("title");
-//                                    if (nameOfItem.equals("Aerodyanmic Cotton Keyboard")) {
-//                                        numberOfKeysboardsSold++;
-//                                    }
-//                                }
-                            }
-
-                            for (int i = 0; i < orders.length(); i++) {
-                                JSONObject overallOrderInfo = orders.getJSONObject(i);
-                                JSONArray lineOfItems = overallOrderInfo.getJSONArray("line_items");
-                                for (int j = 0; j < lineOfItems.length(); j++) {
-                                    JSONObject individualItemInfo = lineOfItems.getJSONObject(j);
+                                JSONArray individualOrderInfo = overallOrderInfo.getJSONArray("line_items");
+                                for (int j = 0; j < individualOrderInfo.length(); j++) {
+                                    JSONObject individualItemInfo = individualOrderInfo.getJSONObject(j);
                                     String nameOfItem = individualItemInfo.getString("title");
                                     if (nameOfItem.equals("Aerodynamic Cotton Keyboard")) {
                                         int quantity = individualItemInfo.getInt("quantity");
