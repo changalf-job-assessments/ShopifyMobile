@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,12 +15,15 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private TextView mTotalRevenue;
     private TextView mKeyboardsSold;
@@ -50,11 +54,27 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String url = "https://shopicruit.myshopify.com/admin/orders.json?" +
                 "page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        //mTotalRevenue.setText(response.toString());
+                    public void onResponse(String response) {
+                        double totalRevenue = 0.0;
+                        int keysboardsSold = 0;
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = jsonObject.getJSONArray("orders");
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject orderInfo = jsonArray.getJSONObject(i);
+                                double totalPrice = orderInfo.getDouble("total_price");
+                                totalRevenue += totalPrice;
+                            }
+
+                            Log.v(LOG_TAG, jsonArray.toString());
+                            mTotalRevenue.setText(String.valueOf(totalRevenue));
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, e.toString());
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -63,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                         mTotalRevenue.setText("Something went wrong...");
                     }
                 });
-        requestQueue.add(jsonObjectRequest);
+        requestQueue.add(stringRequest);
     }
 
     @Override
