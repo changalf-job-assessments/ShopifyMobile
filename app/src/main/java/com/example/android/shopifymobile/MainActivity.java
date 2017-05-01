@@ -59,19 +59,43 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         double totalRevenue = 0.0;
-                        int keysboardsSold = 0;
+                        int numberOfKeysboardsSold = 0;
+                        int quantityOfItem = 0;
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            JSONArray jsonArray = jsonObject.getJSONArray("orders");
+                            JSONArray orders = jsonObject.getJSONArray("orders");
 
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject orderInfo = jsonArray.getJSONObject(i);
-                                double totalPrice = orderInfo.getDouble("total_price");
+                            for (int i = 0; i < orders.length(); i++) {
+                                JSONObject overallOrderInfo = orders.getJSONObject(i);
+
+                                double totalPrice = overallOrderInfo.getDouble("total_price");
                                 totalRevenue += totalPrice;
+
+//                                JSONArray individualOrderInfo = overallOrderInfo.getJSONArray("line_items");
+//                                for (int j = 0; j < individualOrderInfo.length(); i++) {
+//                                    JSONObject individualItemInfo = individualOrderInfo.getJSONObject(j);
+//                                    String nameOfItem = individualItemInfo.getString("title");
+//                                    if (nameOfItem.equals("Aerodyanmic Cotton Keyboard")) {
+//                                        numberOfKeysboardsSold++;
+//                                    }
+//                                }
                             }
 
-                            Log.v(LOG_TAG, jsonArray.toString());
-                            mTotalRevenue.setText(String.valueOf(totalRevenue));
+                            for (int i = 0; i < orders.length(); i++) {
+                                JSONObject overallOrderInfo = orders.getJSONObject(i);
+                                JSONArray lineOfItems = overallOrderInfo.getJSONArray("line_items");
+                                for (int j = 0; j < lineOfItems.length(); j++) {
+                                    JSONObject individualItemInfo = lineOfItems.getJSONObject(j);
+                                    String nameOfItem = individualItemInfo.getString("title");
+                                    if (nameOfItem.equals("Aerodynamic Cotton Keyboard")) {
+                                        int quantity = individualItemInfo.getInt("quantity");
+                                        numberOfKeysboardsSold += quantity;
+                                    }
+                                }
+                            }
+
+                            mTotalRevenue.setText("$" + String.valueOf(totalRevenue));
+                            mKeyboardsSold.setText(String.valueOf(numberOfKeysboardsSold));
                         } catch (Exception e) {
                             Log.e(LOG_TAG, e.toString());
                         }
